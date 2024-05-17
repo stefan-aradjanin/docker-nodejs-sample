@@ -2,7 +2,12 @@ name: Build and push Docker Image to GitHub Container Registry
 
 on:
 #for manual trigger, will be change
-  workflow_dispatch:
+ # workflow_dispatch:
+
+ #for automatic trigger on version change
+  push:
+    tags:
+      - '*'
 
 jobs:
   push_to_registry:
@@ -21,7 +26,14 @@ jobs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        #password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{secrets.GIT_PAT}}
+
+    - name: Get version tag
+      id: get_tag
+      #extract the last part of the GITHUB_REF
+      #the output from echo is redirected to the GITHUB_ENV file
+      run: echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
@@ -29,6 +41,7 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:latest
+        # tags: ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:latest
+        tags: ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:${{env.TAG}}
       
    
