@@ -7,7 +7,7 @@ on:
  #for automatic trigger on version change
   push:
     tags:
-      - 'v*.*.*'
+      - '*'
 
 jobs:
   push_to_registry:
