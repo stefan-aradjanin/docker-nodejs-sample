@@ -2,15 +2,16 @@ version: '3.7'
 
 services:
   db:
-    image: postgres:latest
+    image: postgres:14.11-alpine
     restart: unless-stopped
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=stefandb
+      - POSTGRES_USER=stefanuser
+      - POSTGRES_PASSWORD=stefanpassword
     volumes:
-      - ./sql-scripts:/docker-entrypoint-initdb.d
+      - database_data:/var/lib/postgresql/data
 
   node-app:
     container_name: node-app
@@ -35,6 +36,9 @@ services:
       - db
     #command: npm run dev
 
+volumes:
+  database_data:
+    driver: local
 
 
    
