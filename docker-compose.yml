@@ -1,38 +1,37 @@
 version: '3.7'
 
-volumes:
-  database_data:
-    driver: local
-
 services:
   db:
     image: postgres:latest
-    restart: always
+    restart: unless-stopped
     ports:
       - 5432:5432
     environment:
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     volumes:
-      - database_data:/var/lib/postgresql/data
+      - ./sql-scripts:/docker-entrypoint-initdb.d
 
   node-app:
     container_name: node-app
-    image: node-app
-    build:
-      context: ./
-      dockerfile: Dockerfile
-      target: prod
-    volumes:
-      - app/src
+    image: ghcr.io/stefan-aradjanin/stefan-aradjanin/docker-nodejs-sample:v1.0.6
+    # build:
+    #   context: ./
+    #   dockerfile: Dockerfile
+    #   target: prod
+    # volumes:
+    #   - ./src:/app/src
     ports:
       - 3000:3000
     environment:
       - POSTGRES_HOST=db
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=stefandb
+      - POSTGRES_USER=stefanuser
+      - POSTGRES_PASSWORD=stefanpassword
     restart: unless-stopped
     links:
+      - db
+    depends_on:
       - db
     #command: npm run dev
 
