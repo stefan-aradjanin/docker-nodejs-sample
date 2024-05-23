@@ -46,6 +46,8 @@ jobs:
           echo "TAG=${{ github.event.inputs.version }}" >> $GITHUB_ENV
         else
           echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
+        fi
+      shell: bash
 
     - name: Validate version format
       run: |
