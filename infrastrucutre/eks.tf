@@ -1,7 +1,3 @@
-data "http" "myip" {
-  url = "https://ifconfig.me/ip"
-}
-
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 20.0"
@@ -11,7 +7,7 @@ module "eks" {
 
   cluster_endpoint_public_access       = true
   cluster_endpoint_private_access      = true
-  cluster_endpoint_public_access_cidrs = ["${data.http.myip.response_body}/32"]
+  cluster_endpoint_public_access_cidrs = [var.my_office_cidr]
 
   cluster_addons = {
     coredns = {
