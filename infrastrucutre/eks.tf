@@ -54,7 +54,7 @@ module "eks" {
 
       policy_associations = {
         vega-course = {
-          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSEditPolicy"
           access_scope = {
             namespaces = ["vega-course-namespace"]
             type       = "namespace"
