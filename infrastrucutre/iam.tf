@@ -32,6 +32,19 @@ module "github_actions_ecr_policy" {
           "ecr:DeleteRepositoryPolicy"
         ],
         Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "sts:AssumeRoleWithWebIdentity",
+          "eks:DescribeNodegroup",
+          "eks:ListNodegroups",
+          "eks:AccessKubernetesApi",
+          "eks:DescribeCluster",
+          "eks:ListClusters",
+          "eks:ListIdentityProviderConfigs"
+        ],
+        Resource = "*"
       }
     ]
   })
