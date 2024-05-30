@@ -21,3 +21,9 @@ variable "route_53_zone_name" {
   type        = string
   default     = "beta.devops.sitesstage.com"
 }
+
+variable "vpc_region" {
+  description = "VPC Region"
+  type        = string
+  default     = "eu-central-1"
+}

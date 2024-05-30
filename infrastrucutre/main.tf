@@ -13,7 +13,7 @@ terraform {
 }
 
 provider "aws" {
-  region  = "eu-central-1"
+  region  = var.vpc_region
   profile = "vega-course-terraform"
   default_tags {
     tags = {
