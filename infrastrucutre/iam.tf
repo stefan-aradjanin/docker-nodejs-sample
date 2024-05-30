@@ -67,3 +67,21 @@ module "iam_iam-assumable-role-with-oidc" {
   oidc_fully_qualified_audiences = ["sts.amazonaws.com"]
   oidc_subjects_with_wildcards   = ["repo:stefan-aradjanin/docker-nodejs-sample:*"]
 }
+
+
+module "iam_irsa-alb-controller" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "~> 5.0"
+
+  role_name = "vega-course-alb-irsa"
+
+  attach_load_balancer_controller_policy = true
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["load-balancer:alb-controller"]
+    }
+  }
+
+}
