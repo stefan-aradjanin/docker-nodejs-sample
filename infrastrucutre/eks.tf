@@ -52,4 +52,29 @@ module "eks" {
       }
     }
   }
+
+  cluster_addons = {
+    aws-ebs-csi-driver = {
+      addon_name                  = "aws-ebs-csi-driver"
+      addon_version               = "v1.30.0-eksbuild.1"
+      resolve_conflicts_on_update = "PRESERVE"
+      service_account_role_arn    = module.iam_irsa-ebs-csi-driver.iam_role_arn
+    }
+  }
+}
+
+resource "kubernetes_storage_class" "ebs_sc" {
+  metadata {
+    name = "vega-course-ebs-sc"
+  }
+
+  storage_provisioner    = "ebs.csi.aws.com"
+  reclaim_policy         = "Retain"
+  volume_binding_mode    = "WaitForFirstConsumer"
+  allow_volume_expansion = true
+  parameters = {
+    encrypted = "true"
+  }
+
+  depends_on = [module.eks]
 }
