@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.name }}-ingress
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.name }}
+  annotations:
+    kubernetes.io/ingress.class: {{ .Values.ingress.class }}
+    alb.ingress.kubernetes.io/scheme: {{ .Values.ingress.scheme }}
+    alb.ingress.kubernetes.io/target-type: {{ .Values.ingress.type }}
+    alb.ingress.kubernetes.io/backend-protocol: {{ .Values.ingress.backend_protocol }}
+    alb.ingress.kubernetes.io/certificate-arn: {{ .Values.ingress.certificate_arn }}
+    alb.ingress.kubernetes.io/load-balancer-attributes: "idle_timeout.timeout_seconds=60"
+spec:
+  rules:
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          - path: {{ .Values.ingress.path }}
+            pathType: {{ .Values.ingress.pathType }}
+            backend:
+              service:
+                name: {{ .Values.name }}
+                port:
+                  number: {{ .Values.service.port }}
+
