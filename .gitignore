@@ -37,3 +37,9 @@ override.tf.json
 .terraformrc
 terraform.rc
 *.hcl
+kubectl
+kubectl.*
+.terraform
+.terraform.*
+*.tpl
+*.tgz
