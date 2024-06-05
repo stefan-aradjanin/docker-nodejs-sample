@@ -6,7 +6,6 @@ metadata:
   labels:
    app: {{ .Values.name }}
 spec:
-  # is it clusterip?
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}

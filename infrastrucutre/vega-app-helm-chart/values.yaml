@@ -7,11 +7,14 @@ name: "vega-course-app"
 namespace: "vegait-training"
 
 postgres_config:
-  db: "stefandb"
-  user: "stefanuser"
-  password: "stefanpassword"
   port: 5432
   host: "vega-course-postgresql"
+
+secrets_config:
+  db:
+  user:
+  password:
+
 
 service:
   type: ClusterIP
@@ -24,7 +27,6 @@ ingress:
   scheme: internet-facing
   type: ip
   ssl_redirect: "443"
-  certificate_arn: "arn:aws:acm:eu-central-1:533267377331:certificate/9484c84e-481e-4907-aa6d-2e8851a3e946"
   backend_protocol: HTTP
   host: "stefan-aradjanin.beta.devops.sitesstage.com"
   path: /

@@ -10,7 +10,6 @@ metadata:
     alb.ingress.kubernetes.io/scheme: {{ .Values.ingress.scheme }}
     alb.ingress.kubernetes.io/target-type: {{ .Values.ingress.type }}
     alb.ingress.kubernetes.io/backend-protocol: {{ .Values.ingress.backend_protocol }}
-    alb.ingress.kubernetes.io/certificate-arn: {{ .Values.ingress.certificate_arn }}
     alb.ingress.kubernetes.io/load-balancer-attributes: "idle_timeout.timeout_seconds=60"
 spec:
   rules:
@@ -21,7 +20,7 @@ spec:
             pathType: {{ .Values.ingress.pathType }}
             backend:
               service:
-                name: {{ .Values.name }}
+                name: {{ .Values.name }}-service
                 port:
                   number: {{ .Values.service.port }}
 
