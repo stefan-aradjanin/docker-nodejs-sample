@@ -27,3 +27,9 @@ variable "vpc_region" {
   type        = string
   default     = "eu-central-1"
 }
+
+variable "app_load_balancer" {
+  description = "ALB name"
+  type        = string
+  default     = "k8s-vegaittr-vegacour-106708ffd8"
+}

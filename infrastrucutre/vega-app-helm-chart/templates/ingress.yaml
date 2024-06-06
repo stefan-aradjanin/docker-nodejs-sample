@@ -11,6 +11,7 @@ metadata:
     alb.ingress.kubernetes.io/target-type: {{ .Values.ingress.type }}
     alb.ingress.kubernetes.io/backend-protocol: {{ .Values.ingress.backend_protocol }}
     alb.ingress.kubernetes.io/load-balancer-attributes: "idle_timeout.timeout_seconds=60"
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
 spec:
   rules:
     - host: {{ .Values.ingress.host }}

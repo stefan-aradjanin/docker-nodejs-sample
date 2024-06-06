@@ -36,6 +36,14 @@ provider "helm" {
       args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
       command     = "aws"
     }
+
+
+  }
+
+  registry {
+    url      = "oci://${module.ecr.repository_url}"
+    username = data.aws_ecr_authorization_token.token.user_name
+    password = data.aws_ecr_authorization_token.token.password
   }
 }
 
