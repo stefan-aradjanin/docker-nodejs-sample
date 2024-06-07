@@ -95,3 +95,138 @@ resource "helm_release" "postgresql" {
     value = true
   }
 }
+
+resource "helm_release" "vega-course-app" {
+  name             = "vega-course-app"
+  namespace        = "vegait-training"
+  create_namespace = false
+
+  repository = "oci://${module.ecr.repository_registry_id}.dkr.ecr.${var.vpc_region}.amazonaws.com"
+  chart      = "vega-course-repository"
+  version    = "0.1.0"
+
+  set {
+    name  = "replicaCount"
+    value = 1
+  }
+
+  set {
+    name  = "name"
+    value = "vega-course-app"
+  }
+
+  set {
+    name  = "namespace"
+    value = "vegait-training"
+  }
+
+  set {
+    name  = "postgres_config.port"
+    value = jsondecode(data.aws_secretsmanager_secret_version.postgres_latest_ver.secret_string)["port"]
+  }
+
+  set {
+    name  = "postgres_config.host"
+    value = "vega-course-postgresql"
+  }
+
+  set {
+    name  = "secrets_config.db"
+    value = jsondecode(data.aws_secretsmanager_secret_version.postgres_latest_ver.secret_string)["db"]
+  }
+
+  set {
+    name  = "secrets_config.user"
+    value = jsondecode(data.aws_secretsmanager_secret_version.postgres_latest_ver.secret_string)["username"]
+  }
+
+  set {
+    name  = "secrets_config.password"
+    value = jsondecode(data.aws_secretsmanager_secret_version.postgres_latest_ver.secret_string)["password"]
+  }
+
+  set {
+    name  = "service.type"
+    value = "ClusterIP"
+  }
+
+  set {
+    name  = "service.port"
+    value = 443
+  }
+
+  set {
+    name  = "service.protocol"
+    value = "TCP"
+  }
+
+  set {
+    name  = "service.name"
+    value = "http-service"
+  }
+
+  set {
+    name  = "ingress.class"
+    value = "alb"
+  }
+
+
+  set {
+    name  = "ingress.scheme"
+    value = "internet-facing"
+  }
+
+
+  set {
+    name  = "ingress.type"
+    value = "ip"
+  }
+
+
+  set {
+    name  = "ingress.ssl_redirect"
+    value = 443
+  }
+
+
+  set {
+    name  = "ingress.backend_protocol"
+    value = "HTTP"
+  }
+
+
+  set {
+    name  = "ingress.host"
+    value = var.domain_name
+  }
+
+  set {
+    name  = "ingress.path"
+    value = "/"
+  }
+
+  set {
+    name  = "ingress.pathType"
+    value = "Prefix"
+  }
+
+  set {
+    name  = "image.repository"
+    value = "ghcr.io/stefan-aradjanin/stefan-aradjanin/docker-nodejs-sample"
+  }
+
+  set {
+    name  = "image.tag"
+    value = "v1.0.6"
+  }
+
+  set {
+    name  = "image.pullPolicy"
+    value = "IfNotPresent"
+  }
+
+  set {
+    name  = "image.port"
+    value = 3000
+  }
+}
