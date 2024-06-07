@@ -12,6 +12,14 @@ on:
   push:
     tags:
        - 'v*.*.*'
+  
+env:
+  AWS_REGION: 'eu-central-1'
+  AWS_ECR_REPOSITORY: 'vega-course-repository'
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   push_to_registry:
@@ -30,14 +38,20 @@ jobs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        #password: ${{ secrets.GITHUB_TOKEN }}
         password: ${{secrets.GIT_PAT}}
 
-    # - name: Get version tag
-    #   id: get_tag
-    #   #extract the last part of the GITHUB_REF
-    #   #the output from echo is redirected to the GITHUB_ENV file
-    #   run: echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+        aws-region: ${{ env.AWS_REGION }}
+        
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+      with:
+        mask-password: 'true'
+        registries: ${{ secrets.AWS_ACCOUNT_ID }}
     
     - name: Determine trigger type
       id: determine-trigger
@@ -58,11 +72,13 @@ jobs:
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
       with:
         context: .
         file: ./Dockerfile
         push: true
         # tags: ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:latest
-        tags: ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:${{env.TAG}}
-      
-   
+        tags: |
+            ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:${{env.TAG}}
+            $ECR_REGISTRY/${{ env.AWS_ECR_REPOSITORY }}:app-${{ env.TAG }}
