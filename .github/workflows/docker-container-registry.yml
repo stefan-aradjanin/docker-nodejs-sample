@@ -81,7 +81,4 @@ jobs:
         # tags: ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:latest
         tags: |
             ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:${{env.TAG}}
-            $ECR_REGISTRY/${{ env.AWS_ECR_REPOSITORY }}:app-${{ env.TAG }}
-
-      
-   
+            ${{ env.ECR_REGISTRY}}/${{ env.AWS_ECR_REPOSITORY }}:app-${{ env.TAG }}

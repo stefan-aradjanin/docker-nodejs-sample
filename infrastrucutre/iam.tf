@@ -29,7 +29,8 @@ module "github_actions_ecr_policy" {
           "ecr:DeleteRepository",
           "ecr:BatchDeleteImage",
           "ecr:SetRepositoryPolicy",
-          "ecr:DeleteRepositoryPolicy"
+          "ecr:DeleteRepositoryPolicy",
+          "ecr:GetAuthorizationToken"
         ],
         Resource = "*"
       },
