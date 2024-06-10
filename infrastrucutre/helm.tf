@@ -212,12 +212,12 @@ resource "helm_release" "vega-course-app" {
 
   set {
     name  = "image.repository"
-    value = "ghcr.io/stefan-aradjanin/stefan-aradjanin/docker-nodejs-sample"
+    value = module.ecr.repository_url
   }
 
   set {
     name  = "image.tag"
-    value = "v1.0.6"
+    value = "app-v1.0.6"
   }
 
   set {

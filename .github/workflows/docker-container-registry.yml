@@ -14,8 +14,11 @@ on:
        - 'v*.*.*'
   
 env:
-  AWS_REGION: 'eu-central-1'
-  AWS_ECR_REPOSITORY: 'vega-course-repository'
+  AWS_REGION: eu-central-1
+  AWS_ECR_REPOSITORY: vega-course-repository
+  AWS_EKS_CLUSTER: vega-course-cluster
+  AWS_EKS_RELEASE: vega-course-app
+  AWS_EKS_NAMESPACE: vegait-training
 
 permissions:
   id-token: write
@@ -82,3 +85,16 @@ jobs:
         tags: |
             ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:${{env.TAG}}
             ${{ env.ECR_REGISTRY}}/${{ env.AWS_ECR_REPOSITORY }}:app-${{ env.TAG }}
+            
+    - name: Update kubeconfig
+      run: |
+        aws eks update-kubeconfig --name ${{ env.AWS_EKS_CLUSTER }} --region ${{ env.AWS_REGION }}
+
+    - name: Deploy to EKS using Helm
+      env:
+        AWS_EKS_CHART: oci://${{ steps.login-ecr.outputs.registry }}/${{ env.AWS_ECR_REPOSITORY }}
+      run: |
+        helm upgrade ${{ env.AWS_EKS_RELEASE }} ${{ env.AWS_EKS_CHART }} \
+          --reuse-values \
+          --namespace ${{ env.AWS_EKS_NAMESPACE }} \
+          --set image.tag=app-${{ env.TAG }}
