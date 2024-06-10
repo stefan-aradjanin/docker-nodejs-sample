@@ -18,7 +18,7 @@ env:
   AWS_ECR_REPOSITORY: 'vega-course-repository'
   AWS_EKS_CLUSTER: 'vega-course-cluster'
   AWS_EKS_RELEASE: 'vega-course-app'
-  AWS_EKS_CHART: oci://${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/vega-course-repository
+  AWS_EKS_CHART: oci://${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.eu-central-1.amazonaws.com/vega-course-repository
   AWS_EKS_NAMESPACE: 'vegait-training'
 
 permissions:
