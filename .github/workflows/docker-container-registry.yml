@@ -14,11 +14,11 @@ on:
        - 'v*.*.*'
   
 env:
-  AWS_REGION: 'eu-central-1'
-  AWS_ECR_REPOSITORY: 'vega-course-repository'
-  AWS_EKS_CLUSTER: 'vega-course-cluster'
-  AWS_EKS_RELEASE: 'vega-course-app'
-  AWS_EKS_NAMESPACE: 'vegait-training'
+  AWS_REGION: eu-central-1
+  AWS_ECR_REPOSITORY: vega-course-repository
+  AWS_EKS_CLUSTER: vega-course-cluster
+  AWS_EKS_RELEASE: vega-course-app
+  AWS_EKS_NAMESPACE: vegait-training
 
 permissions:
   id-token: write
@@ -90,9 +90,12 @@ jobs:
       run: |
         aws eks update-kubeconfig --name ${{ env.AWS_EKS_CLUSTER }} --region ${{ env.AWS_REGION }}
 
+    - name: Verify kubeconfig
+      run: kubectl get svc
+
     - name: Deploy to EKS using Helm
       env:
-        AWS_EKS_CHART: oci://${{ steps.login-ecr.outputs.registry }}/vega-course-repository
+        AWS_EKS_CHART: oci://${{ steps.login-ecr.outputs.registry }}/${{ env.AWS_ECR_REPOSITORY }}
       run: |
         helm upgrade ${{ env.AWS_EKS_RELEASE }} ${{ env.AWS_EKS_CHART }} \
           --reuse-values \
