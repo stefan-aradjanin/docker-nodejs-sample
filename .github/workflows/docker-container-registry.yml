@@ -90,9 +90,6 @@ jobs:
       run: |
         aws eks update-kubeconfig --name ${{ env.AWS_EKS_CLUSTER }} --region ${{ env.AWS_REGION }}
 
-    - name: Verify kubeconfig
-      run: kubectl get svc
-
     - name: Deploy to EKS using Helm
       env:
         AWS_EKS_CHART: oci://${{ steps.login-ecr.outputs.registry }}/${{ env.AWS_ECR_REPOSITORY }}
