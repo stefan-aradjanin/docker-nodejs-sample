@@ -19,6 +19,7 @@ env:
   AWS_EKS_CLUSTER: vega-course-cluster
   AWS_EKS_RELEASE: vega-course-app
   AWS_EKS_NAMESPACE: vegait-training
+  AWS_PROFILE: vega-course-terraform
 
 permissions:
   id-token: write
@@ -88,7 +89,7 @@ jobs:
             
     - name: Update kubeconfig
       run: |
-        aws eks update-kubeconfig --name ${{ env.AWS_EKS_CLUSTER }} --region ${{ env.AWS_REGION }}
+        aws eks update-kubeconfig --name ${{ env.AWS_EKS_CLUSTER }} --region ${{ env.AWS_REGION }} --profile ${{ env.AWS_PROFILE }}
 
     - name: View kubeconfig
       run: cat $HOME/.kube/config
