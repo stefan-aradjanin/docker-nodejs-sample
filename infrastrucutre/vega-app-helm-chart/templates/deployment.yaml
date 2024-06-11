@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.name }}-deployment
+  name: {{ .Release.Name }}-deployment
   namespace: {{ .Values.namespace }}
   labels:
     app: {{ .Values.name }}
@@ -25,6 +25,6 @@ spec:
               protocol: TCP
           envFrom:
             - configMapRef:
-                name: {{ .Values.name }}-configmap
+                name: {{ .Release.Name }}-configmap
             - secretRef:
-                name: {{ .Values.name }}-secret
+                name: {{ .Release.Name }}-secret

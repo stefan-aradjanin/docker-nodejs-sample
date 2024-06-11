@@ -7,7 +7,7 @@ module "eks" {
 
   cluster_endpoint_public_access       = true
   cluster_endpoint_private_access      = true
-  cluster_endpoint_public_access_cidrs = [var.my_office_cidr]
+  cluster_endpoint_public_access_cidrs = ["0.0.0.0/0"]
 
 
   vpc_id     = module.vpc.vpc_id
@@ -19,10 +19,10 @@ module "eks" {
       max_size     = 10
       desired_size = 1
 
-      instance_types                 = ["t3.small"]
-      capacity_type                  = "ON_DEMAND"
-      ami_type                       = "BOTTLEROCKET_x86_64"
-      use_latest_ami_release_version = true
+      instance_types = ["t3.small"]
+      capacity_type  = "ON_DEMAND"
+      ami_type       = "BOTTLEROCKET_x86_64"
+      # use_latest_ami_release_version = true
 
       create_iam_role = true
       iam_role_additional_policies = {
@@ -45,7 +45,7 @@ module "eks" {
         vega-course = {
           policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSEditPolicy"
           access_scope = {
-            namespaces = ["vega-course-namespace"]
+            namespaces = ["vegait-training"]
             type       = "namespace"
           }
         }

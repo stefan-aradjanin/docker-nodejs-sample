@@ -90,12 +90,6 @@ jobs:
       run: |
         aws eks update-kubeconfig --name ${{ env.AWS_EKS_CLUSTER }} --region ${{ env.AWS_REGION }}
 
-    - name: View kubeconfig
-      run: cat $HOME/.kube/config
-
-    - name: Verify kubeconfig
-      run: kubectl get svc --namespace vegait-training
-
     - name: Deploy to EKS using Helm
       env:
         AWS_EKS_CHART: oci://${{ steps.login-ecr.outputs.registry }}/${{ env.AWS_ECR_REPOSITORY }}
